@@ -13,6 +13,7 @@ This repository contains a **Dockerfile**, and a **Vagrantfile** for local devel
 
 These references have been helpful when creating this service:
 
+https://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified
 https://github.com/dsyer/sparklr-boot
 https://github.com/spring-projects/spring-security-oauth
 http://stackoverflow.com/questions/26621693/how-to-get-spring-boot-and-oauth2-example-to-use-password-grant-credentials-othe
