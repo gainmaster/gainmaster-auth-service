@@ -1,0 +1,11 @@
+.vagrant/
+.git/
+.gradle/
+.idea/
+build/
+.editorconfig
+.gitattributes
+.gitignore
+build.sh
+gainmaster-oauth-service.iml
+README.md
