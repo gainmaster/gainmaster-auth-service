@@ -28,8 +28,14 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
             .withClient("client")
+                .secret("secret")
+                .authorities("ROLE_TRUSTED_INTERNAL_CLIENT")
                 .scopes("scope")
                 .resourceIds("oauth")
+            .and()
+            .withClient("client2")
+                .scopes("scope")
+            .resourceIds("oauth")
         ;
     }
 
