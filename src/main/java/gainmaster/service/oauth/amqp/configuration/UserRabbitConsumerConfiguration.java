@@ -25,6 +25,8 @@ public class UserRabbitConsumerConfiguration extends RabbitServerConfiguration{
         container.setConnectionFactory(connectionFactory());
         container.setQueues(createUserQueue());
         container.setMessageListener(new MessageListenerAdapter(new CreateUserMessageHandler()));
+        //If exception, do not requeue message
+        container.setDefaultRequeueRejected(false);
         return container;
     }
 
@@ -34,6 +36,8 @@ public class UserRabbitConsumerConfiguration extends RabbitServerConfiguration{
         container.setConnectionFactory(connectionFactory());
         container.setQueues(deleteUserQueue());
         container.setMessageListener(new MessageListenerAdapter(new DeleteUserMessageHandler()));
+        //If exception, do not requeue message
+        container.setDefaultRequeueRejected(false);
         return container;
     }
 
