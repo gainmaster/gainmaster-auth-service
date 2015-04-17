@@ -1,6 +1,8 @@
 package gainmaster.service.oauth.amqp.gateway;
 
 import org.springframework.amqp.rabbit.core.support.RabbitGatewaySupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -10,15 +12,8 @@ import java.io.IOException;
 
 public class UserRabbitGateway extends RabbitGatewaySupport implements UserGateway {
 
-    public Object getUser(int id){
-        System.out.println("RABBITMQ - Sending request: get " + id);
-        getRabbitTemplate().convertSendAndReceive("get", String.valueOf(id));
-        return getRabbitTemplate().receiveAndConvert("gainmaster.service.oauth.user.queue.reply");
-    }
-
     public Object getCredentials(String username){
-        System.out.println("RABBITMQ - Request credentials for user " + username);
-        getRabbitTemplate().convertSendAndReceive("get", username);
-        return getRabbitTemplate().receiveAndConvert("gainmaster.service.oauth.user.queue.reply");
+        System.out.println("RABBITMQ: Request credentials for user " + username);
+        return getRabbitTemplate().convertSendAndReceive("get", username);
     }
 }

@@ -5,8 +5,7 @@ import gainmaster.service.oauth.amqp.handler.DeleteUserMessageHandler;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-import org.springframework.amqp.support.converter.JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,9 +16,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UserRabbitConsumerConfiguration extends RabbitServerConfiguration{
 
-    protected final static String USER_QUEUE_CREATE_NAME    = "gainmaster.service.oauth.user.create.queue";
-    protected final static String USER_QUEUE_DELETE_NAME    = "gainmaster.service.oauth.user.delete.queue";
-
     protected final static String USER_CREATE_ROUTING_KEY   = "create";
     protected final static String USER_DELETE_ROUTING_KEY   = "delete";
 
@@ -27,7 +23,7 @@ public class UserRabbitConsumerConfiguration extends RabbitServerConfiguration{
     public SimpleMessageListenerContainer createUserListenerContainer() {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory());
-        container.setQueueNames(USER_QUEUE_CREATE_NAME);
+        container.setQueues(createUserQueue());
         container.setMessageListener(new MessageListenerAdapter(new CreateUserMessageHandler()));
         return container;
     }
@@ -36,16 +32,16 @@ public class UserRabbitConsumerConfiguration extends RabbitServerConfiguration{
     public SimpleMessageListenerContainer deleteUserListenerContainer() {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory());
-        container.setQueueNames(USER_QUEUE_DELETE_NAME);
+        container.setQueues(deleteUserQueue());
         container.setMessageListener(new MessageListenerAdapter(new DeleteUserMessageHandler()));
         return container;
     }
 
     @Bean
-    public Queue createUserQueue(){ return new Queue(USER_QUEUE_CREATE_NAME); }
+    public Queue createUserQueue(){ return amqpAdmin().declareQueue(); }
 
     @Bean
-    public Queue deleteUserQueue(){ return new Queue(USER_QUEUE_DELETE_NAME); }
+    public Queue deleteUserQueue(){ return amqpAdmin().declareQueue(); }
 
     @Bean
     public Binding createUserQueueBinding(){ return BindingBuilder.bind(createUserQueue()).to(userTopicExchange()).with(USER_CREATE_ROUTING_KEY); }
