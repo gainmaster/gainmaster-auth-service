@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+EXEC_DIR=$(pwd)
+PROJ_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd)
+
+if [[ ${EXEC_DIR} != ${PROJ_DIR}* ]]; then
+    echo "Gradle must be executed from within gainmaster-oauth-service project folder."
+    exit 1
+fi
+
+WORK_DIR=${EXEC_DIR#"$PROJ_DIR"}
+
+docker run -it --rm \
+  -v /projects/gainmaster-oauth-service:/project \
+  -w="/project${WORK_DIR}/" \
+  --entrypoint gradle \
+  bachelorthesis/gradle
