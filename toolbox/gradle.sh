@@ -13,5 +13,6 @@ WORK_DIR=${EXEC_DIR#"$PROJ_DIR"}
 docker run -it --rm \
   -v /projects/gainmaster-oauth-service:/project \
   -w="/project${WORK_DIR}/" \
+  -e GRADLE_USER_HOME=/project/.gradle/ \
   --entrypoint gradle \
-  bachelorthesis/gradle
+  bachelorthesis/gradle $@
