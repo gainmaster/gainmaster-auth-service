@@ -17,7 +17,6 @@ public class UserRabbitPublisherConfiguration extends RabbitServerConfiguration{
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
         template.setExchange(USER_EXCHANGE_NAME);
-        template.setReplyQueue(userReplyQueue());
         template.setReplyTimeout(REPLY_TIMEOUT);
         return template;
     }
