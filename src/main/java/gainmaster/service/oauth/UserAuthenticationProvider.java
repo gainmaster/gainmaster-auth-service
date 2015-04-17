@@ -29,6 +29,8 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         String input_username = authentication.getName();
         String input_password = authentication.getCredentials().toString();
 
+        System.out.println("ATTEMPTING TO AUTHENTICATE USER " + input_username + " WITH PASSWORD " + input_password);
+
         Object password = userRabbitGateway.getCredentials(input_username);
         if(password == null) return null;
 
