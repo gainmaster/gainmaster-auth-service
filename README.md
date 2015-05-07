@@ -1,6 +1,6 @@
 # Gainmaster OAuth Service
 
-[![Build Status](http://jenkins.hesjevik.im/buildStatus/icon?job=gainmaster-oauth-service)](http://jenkins.hesjevik.im/job/gainmaster-oauth-service/) [![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg?style=plastic)][docker_hub_repository]
+[![Build Status](http://jenkins.hesjevik.im/buildStatus/icon?job=gainmaster-oauth2-service)](http://jenkins.hesjevik.im/job/gainmaster-oauth2-service/) [![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg?style=plastic)][docker_hub_repository]
 
 This repository contains a **Dockerfile**, and a **Vagrantfile** for local development. This repository is a part of an automated build, published to the [Docker Hub][docker_hub_repository].
 
