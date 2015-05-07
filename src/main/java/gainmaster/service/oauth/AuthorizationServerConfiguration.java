@@ -31,12 +31,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .secret("secret")
                 .authorities("ROLE_TRUSTED_INTERNAL_CLIENT")
                 .scopes("scope")
+                .authorizedGrantTypes("authorization_code", "refresh_token", "password")
                 .resourceIds("oauth")
             .and()
             .withClient("client2")
                 .scopes("scope")
-            .resourceIds("oauth")
-        ;
+                .resourceIds("oauth");
     }
 
     @Override
