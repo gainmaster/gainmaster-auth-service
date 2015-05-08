@@ -23,6 +23,7 @@ springBoot { //TODO: Why am i here
     mainClass = 'gainmaster.service.oauth.Application'
 }
 
+
 jar {
     baseName = 'gainmaster-oauth-service'
     version =  '0.1.0'

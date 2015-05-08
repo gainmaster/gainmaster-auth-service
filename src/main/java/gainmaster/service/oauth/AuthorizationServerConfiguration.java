@@ -8,6 +8,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableAuthorizationServer
@@ -35,13 +39,28 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .resourceIds("oauth")
             .and()
             .withClient("client2")
+                .authorities("ROLE_TRUSTED_INTERNAL_CLIENT")
                 .scopes("scope")
+                .authorizedGrantTypes("authorization_code", "refresh_token", "password")
                 .resourceIds("oauth");
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager);
-    }
+        endpoints.addInterceptor(new HandlerInterceptorAdapter() {
 
+            @Override
+            public boolean preHandle(HttpServletRequest hsr, HttpServletResponse rs, Object o) throws Exception {
+                rs.setHeader("Access-Control-Allow-Origin", "*");
+                rs.setHeader("Access-Control-Allow-Methods", "GET, POST");
+                rs.setHeader("Access-Control-Max-Age", "3600");
+                rs.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+                return true;
+            }
+        });
+    }
 }
+
+
+
