@@ -36,7 +36,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 
         if (input_password.equals(password.toString())) {
             List<GrantedAuthority> grantedAuths = new ArrayList();
-            grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+            grantedAuths.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
             Authentication auth = new UsernamePasswordAuthenticationToken(input_username, input_password, grantedAuths);
             return auth;
         } else {

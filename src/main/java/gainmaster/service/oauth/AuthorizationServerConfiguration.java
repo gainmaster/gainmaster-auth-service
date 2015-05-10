@@ -24,7 +24,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         // Allow access to /oauth/check_token. This must be done so that our services can
         // decode tokens, and is not a part of the oauth2 specs
-        oauthServer.tokenKeyAccess("hasAuthority('ROLE_TRUSTED_INTERNAL_CLIENT')");
+        oauthServer.tokenKeyAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
+        oauthServer.allowFormAuthenticationForClients();
         oauthServer.realm("oauth");
     }
 
@@ -33,13 +34,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         clients.inMemory()
             .withClient("client")
                 .secret("secret")
-                .authorities("ROLE_TRUSTED_INTERNAL_CLIENT")
+                .authorities("ROLE_TRUSTED_CLIENT")
                 .scopes("scope")
                 .authorizedGrantTypes("authorization_code", "refresh_token", "password")
                 .resourceIds("oauth")
             .and()
             .withClient("client2")
-                .authorities("ROLE_TRUSTED_INTERNAL_CLIENT")
+                .authorities("ROLE_TRUSTED_CLIENT")
                 .scopes("scope")
                 .authorizedGrantTypes("authorization_code", "refresh_token", "password")
                 .resourceIds("oauth");
