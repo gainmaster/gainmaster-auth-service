@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-/**
- * Created by lorre on 5/11/15.
- */
-
 @Controller
 public class RevokeTokenController {
 
@@ -25,9 +21,8 @@ public class RevokeTokenController {
     public @ResponseBody
     ResponseEntity<String> create(@RequestParam("token") String value) throws InvalidClientException {
         if(defaultTokenServices.revokeToken(value)){
-            return new ResponseEntity<String>(HttpStatus.OK);
+            return new ResponseEntity<String>("Token successfully revoked", HttpStatus.OK);
         };
-        return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
-
+        return new ResponseEntity<String>("Could not find token", HttpStatus.NOT_FOUND);
     }
 }

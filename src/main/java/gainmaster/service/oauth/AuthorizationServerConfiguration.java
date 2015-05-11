@@ -62,7 +62,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager);
         endpoints.userDetailsService(userDetailService);
-        endpoints.tokenStore(tokenStore);
+        endpoints.tokenStore(tokenStore());
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.OPTIONS, HttpMethod.POST);
 
         endpoints.addInterceptor(new HandlerInterceptorAdapter() {
