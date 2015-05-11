@@ -20,6 +20,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UserDetailsServiceImplementation userDetailService;
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         // Allow access to /oauth/check_token. This must be done so that our services can
@@ -49,12 +52,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager);
+        endpoints.userDetailsService(userDetailService);
         endpoints.addInterceptor(new HandlerInterceptorAdapter() {
 
             @Override
             public boolean preHandle(HttpServletRequest hsr, HttpServletResponse rs, Object o) throws Exception {
                 rs.setHeader("Access-Control-Allow-Origin", "*");
-                rs.setHeader("Access-Control-Allow-Methods", "GET, POST");
+                rs.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
                 rs.setHeader("Access-Control-Max-Age", "3600");
                 rs.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
                 return true;
