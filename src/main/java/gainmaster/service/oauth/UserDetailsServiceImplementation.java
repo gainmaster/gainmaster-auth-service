@@ -26,13 +26,13 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Object password = userRabbitGateway.getCredentials(username);
-        if(password == null) return null;
+        //Object password = userRabbitGateway.getCredentials(username);
+        //if(password == null) return null;
 
         List<GrantedAuthority> grantedAuths = new ArrayList();
         grantedAuths.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
 
-        return new User(username, password.toString(), grantedAuths);
+        return new User(username, "steinar", grantedAuths);
     }
 
 }

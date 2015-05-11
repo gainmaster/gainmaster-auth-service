@@ -65,7 +65,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         endpoints.tokenStore(tokenStore());
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.OPTIONS, HttpMethod.POST);
 
-        endpoints.addInterceptor(new HandlerInterceptorAdapter() {
+       /* endpoints.addInterceptor(new HandlerInterceptorAdapter() {
 
             @Override
             public boolean preHandle(HttpServletRequest hsr, HttpServletResponse rs, Object o) throws Exception {
@@ -75,7 +75,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 rs.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
                 return true;
             }
-        });
+        });*/
     }
 
     @Bean

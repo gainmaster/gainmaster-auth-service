@@ -8,8 +8,12 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+@Order(Ordered.LOWEST_PRECEDENCE)
 @Component
 public class CORSFilter implements Filter {
 
