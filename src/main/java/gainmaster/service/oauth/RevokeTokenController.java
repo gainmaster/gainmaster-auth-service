@@ -21,8 +21,10 @@ public class RevokeTokenController {
     public @ResponseBody
     ResponseEntity<String> create(@RequestParam("token") String value) throws InvalidClientException {
         if(defaultTokenServices.revokeToken(value)){
-            return new ResponseEntity<String>("Token successfully revoked", HttpStatus.OK);
+            return new ResponseEntity<String>("{\"status\": \"revoked\", \"status_description\": \"Token successfully revoked\"}", HttpStatus.OK);
         };
-        return new ResponseEntity<String>("Could not find token", HttpStatus.NOT_FOUND);
+        //TODO: Allow sending refresh token also
+        //return new ResponseEntity<String>("{\"error\": \"not_found\", \"error_description\": \"Could not find token\"}", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<String>("{\"status\": \"revoked\", \"status_description\": \"Token successfully revoked\"}", HttpStatus.OK);
     }
 }
