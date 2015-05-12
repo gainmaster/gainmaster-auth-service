@@ -8,15 +8,15 @@ import org.springframework.amqp.rabbit.core.support.RabbitGatewaySupport;
 
 public class UserRabbitGateway extends RabbitGatewaySupport implements UserGateway {
 
-    protected final static String USER_GET_ROUTING_KEY   = "get";
+    protected final static String USER_AUTHENTICATION_ROUTING_KEY = "authentication";
 
-    public Object getCredentials(String username){
+    public boolean authenticate(String username, String password){
         System.out.println("RABBITMQ: Request credentials for user " + username);
-        String password = (String) getRabbitTemplate().convertSendAndReceive(USER_GET_ROUTING_KEY, username);
+        String response = (String) getRabbitTemplate().convertSendAndReceive(USER_AUTHENTICATION_ROUTING_KEY, username + ":" + password);
 
-        if(password == null) return null;
-        if(password.isEmpty()) return null;
+        if(response.isEmpty())                  return false;
+        if(response.equalsIgnoreCase("false"))  return false;
 
-        return password;
+        return true;
     }
 }

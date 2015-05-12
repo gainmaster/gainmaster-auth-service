@@ -5,5 +5,5 @@ package gainmaster.service.oauth.amqp.gateway;
  */
 
 public interface UserGateway {
-    Object getCredentials(String username);
+    boolean authenticate(String username, String password);
 }

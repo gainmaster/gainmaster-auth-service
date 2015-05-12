@@ -29,12 +29,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         String input_username = authentication.getName();
         String input_password = authentication.getCredentials().toString();
 
-        System.out.println("ATTEMPTING TO AUTHENTICATE USER " + input_username + " WITH PASSWORD " + input_password);
-
-        //Object password = userRabbitGateway.getCredentials(input_username);
-        //if(password == null) return null;
-
-        if (input_password.equals("steinar")) {
+        if (userRabbitGateway.authenticate(input_username, input_password)) {
             List<GrantedAuthority> grantedAuths = new ArrayList();
             grantedAuths.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
             Authentication auth = new UsernamePasswordAuthenticationToken(input_username, input_password, grantedAuths);
