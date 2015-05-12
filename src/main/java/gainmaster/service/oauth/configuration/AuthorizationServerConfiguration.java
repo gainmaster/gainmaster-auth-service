@@ -3,6 +3,7 @@ package gainmaster.service.oauth.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.client.token.JdbcClientTokenServices;
@@ -45,13 +46,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //Create an inmemory client for authentication
 
-        clients.jdbc(oauthDataSource)
+        clients.inMemory()
             .withClient("client")
             .secret("secret")
             .authorities("ROLE_TRUSTED_CLIENT")
-            .scopes("scope")
             .authorizedGrantTypes("authorization_code", "refresh_token", "password")
-            .resourceIds("oauth");
+            .scopes("read", "write")
+            .resourceIds("gainmaster");
     }
 
     @Override
@@ -67,18 +68,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         return new JdbcTokenStore(oauthDataSource);
     }
 
-    /*
-    @Bean
-    public DefaultTokenServices defaultTokenServices(){
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
-        defaultTokenServices.setSupportRefreshToken(true);
-        return defaultTokenServices;
-    }*/
-
     @Bean
     public AuthorizationServerTokenServices tokenServices() {
-        final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
         return defaultTokenServices;
