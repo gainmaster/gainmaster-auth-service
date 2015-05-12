@@ -1,23 +1,22 @@
-package gainmaster.service.oauth;
+package gainmaster.service.oauth.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.client.token.JdbcClientTokenServices;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
@@ -27,69 +26,66 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserDetailsServiceImplementation userDetailService;
-
-    @Autowired
-    private TokenStore tokenStore;
+    private DataSource oauthDataSource;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         // Allow access to /oauth/check_token. This must be done so that our services can
         // decode tokens, and is not a part of the oauth2 specs
-        oauthServer.tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')").checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
+        oauthServer.tokenKeyAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
+        oauthServer.checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
+        oauthServer.realm("oauth/**");
+
+
+        //Allows client to send authentication in form (client_id and client_secret)
         oauthServer.allowFormAuthenticationForClients();
-        oauthServer.realm("oauth");
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
+        //Create an inmemory client for authentication
+
+        clients.jdbc(oauthDataSource)
             .withClient("client")
-                .secret("secret")
-                .authorities("ROLE_TRUSTED_CLIENT")
-                .scopes("scope")
-                .authorizedGrantTypes("authorization_code", "refresh_token", "password")
-                .resourceIds("oauth")
-            .and()
-            .withClient("client2")
-                .authorities("ROLE_TRUSTED_CLIENT")
-                .scopes("scope")
-                .authorizedGrantTypes("authorization_code", "refresh_token", "password")
-                .resourceIds("oauth");
+            .secret("secret")
+            .authorities("ROLE_TRUSTED_CLIENT")
+            .scopes("scope")
+            .authorizedGrantTypes("authorization_code", "refresh_token", "password")
+            .resourceIds("oauth");
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager);
-        endpoints.userDetailsService(userDetailService);
         endpoints.tokenStore(tokenStore());
+        endpoints.tokenServices(tokenServices());
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.OPTIONS, HttpMethod.POST);
-
-       /* endpoints.addInterceptor(new HandlerInterceptorAdapter() {
-
-            @Override
-            public boolean preHandle(HttpServletRequest hsr, HttpServletResponse rs, Object o) throws Exception {
-                rs.setHeader("Access-Control-Allow-Origin", "*");
-                rs.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-                rs.setHeader("Access-Control-Max-Age", "3600");
-                rs.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-                return true;
-            }
-        });*/
     }
 
     @Bean
-    public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+    public JdbcTokenStore tokenStore() {
+        return new JdbcTokenStore(oauthDataSource);
     }
 
+    /*
     @Bean
-    public DefaultTokenServices defaultTokenServices() {
+    public DefaultTokenServices defaultTokenServices(){
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        return defaultTokenServices;
+    }*/
+
+    @Bean
+    public AuthorizationServerTokenServices tokenServices() {
+        final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
         return defaultTokenServices;
     }
 }
+
+
 
 
 

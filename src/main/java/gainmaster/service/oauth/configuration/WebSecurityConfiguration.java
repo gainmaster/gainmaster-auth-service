@@ -1,12 +1,10 @@
-package gainmaster.service.oauth;
+package gainmaster.service.oauth.configuration;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService;
 
 @Configuration
 @Order(value = 2)
