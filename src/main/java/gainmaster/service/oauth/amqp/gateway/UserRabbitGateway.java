@@ -14,9 +14,10 @@ public class UserRabbitGateway extends RabbitGatewaySupport implements UserGatew
         System.out.println("RABBITMQ: Request credentials for user " + username);
         String response = (String) getRabbitTemplate().convertSendAndReceive(USER_AUTHENTICATION_ROUTING_KEY, username + ":" + password);
 
-        if(response.isEmpty())                  return false;
-        if(response.equalsIgnoreCase("false"))  return false;
+        //Response is null if no answer from bus
+        if(response == null)                    return false;
 
-        return true;
+        //Return true if response equals true
+        return response.equalsIgnoreCase("true");
     }
 }
