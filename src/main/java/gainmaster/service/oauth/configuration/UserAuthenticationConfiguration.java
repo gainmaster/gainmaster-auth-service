@@ -15,5 +15,10 @@ public class UserAuthenticationConfiguration extends GlobalAuthenticationConfigu
     @Override
     public void init(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.authenticationProvider(userAuthenticationProvider);
+
+        authenticationManagerBuilder.inMemoryAuthentication()
+            .withUser("admin")
+            .password("admin")
+            .roles("ADMIN");
     }
 }
