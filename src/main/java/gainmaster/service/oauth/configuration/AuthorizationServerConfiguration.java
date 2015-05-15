@@ -48,11 +48,17 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
         clients.inMemory()
             .withClient("client")
-            .secret("secret")
-            .authorities("ROLE_TRUSTED_CLIENT")
-            .authorizedGrantTypes("authorization_code", "refresh_token", "password")
-            .scopes("read", "write")
-            .resourceIds("gainmaster");
+                .secret("secret")
+                .authorities("ROLE_TRUSTED_CLIENT")
+                .authorizedGrantTypes("authorization_code", "refresh_token", "password")
+                .scopes("read", "write")
+                .resourceIds("gainmaster")
+            .and()
+            .withClient("admin")
+                .secret("secret")
+                .authorities("ROLE_ADMIN")
+                .scopes("read, write")
+                .resourceIds("gainmaster");
     }
 
     @Override
