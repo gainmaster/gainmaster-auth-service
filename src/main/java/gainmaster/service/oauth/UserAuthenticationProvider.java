@@ -29,8 +29,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         String input_username = authentication.getName();
         String input_password = authentication.getCredentials().toString();
 
-        //TODO: Remove else equals steinar
-        if (userRabbitGateway.authenticate(input_username, input_password) || input_password.equals("steinar")) {
+        if (userRabbitGateway.authenticate(input_username, input_password)) {
             List<GrantedAuthority> grantedAuths = new ArrayList();
             grantedAuths.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
             Authentication auth = new UsernamePasswordAuthenticationToken(input_username, input_password, grantedAuths);
